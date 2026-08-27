@@ -37,10 +37,14 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!');
 });
 
-app.listen(PORT, () => {
+if (require.main === module) {
+  app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
     console.log(`Serving frontend from: ${frontendPath}`);
-});
+  });
+}
+
+module.exports = app;
 
 setInterval(() => {}, 1000 * 60 * 60);
 
