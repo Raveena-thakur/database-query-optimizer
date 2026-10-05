@@ -83,14 +83,13 @@ Prerequisites:
 • Unix/Linux/macOS
 • Git
 
-Installation :
+## Installation
 
-git clone https://github.com/rahul-sisodiya/Database-Query-Optimizer.git
-cd Database-Query-Optimizer
-npm install
-cd backend
-npm install
-cd ..
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Raveena-thakur/database-query-optimizer.git
+cd database-query-optimizer
 
 Environment Setup :
 
