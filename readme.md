@@ -1,87 +1,96 @@
-Database Query Optimizer :
+# Database Query Optimizer
 
-This project is a tool to analyze and improve MongoDB query performance. It provides a simple browser-based interface where you can submit queries, understand how they are executed, and get suggestions to make them faster.
-It focuses on practical debugging — identifying slow queries, detecting missing indexes, and testing optimizations before applying them.
+A web-based MongoDB Query Optimizer that analyzes MongoDB queries, evaluates their execution performance, identifies potential indexing issues, and provides index recommendations.
 
----
-
-Table of Contents :
-
-• What is this?
-• Features
-• Tech Stack
-• Project Structure
-• Getting Started
-• How It Works
-• System Components
-• API Endpoints
-• Comparison with Other Tools
-• Contributing
+The application allows users to connect to a MongoDB database, select a collection, submit a query, analyze its execution statistics, view optimization suggestions, and test the potential impact of a suggested index.
 
 ---
 
-What is this?
+## Features
 
-Slow database queries are a common issue in many applications. Finding the exact cause and fixing it can take time.
-This project helps by running your MongoDB queries, analyzing execution plans, detecting performance issues, and suggesting improvements. It also stores query patterns over time.
-
----
-
-Features :
-
-• Submit MongoDB queries through a simple web interface
-• Detect slow queries from logs
-• Identify missing indexes
-• Store and track query patterns
-• Benchmark index improvements before applying them
-• Track index changes using Git
-• Measure CPU and I/O usage
-• Cache query execution plans
-
----
-
-Tech Stack :
-
-Frontend: HTML, CSS, JavaScript
-Backend: Node.js, Express
-Database: MongoDB
-Scripting: Bash
-Version Control: Git
-Profiling: Unix tools
-Configuration: dotenv
+- Analyze MongoDB query execution plans
+- View execution time and query performance statistics
+- Detect collection scans and index scans
+- Identify potential indexing issues
+- Generate index recommendations
+- Calculate a query performance score
+- Estimate potential performance improvements
+- Simulate the impact of a suggested index
+- View query results
+- Compare current query performance with previous statistics
+- Create recommended indexes directly from the interface
+- Reset collection indexes when required
+- Support for MongoDB local and Atlas connections
+- Simple browser-based interface
+- Structured backend with separate controllers, services, routes, and utilities
 
 ---
 
-Project Structure :
+## Tech Stack
 
-MONGO-OPTIMIZER/
+### Frontend
 
-backend/
-config/
-controllers/
-routes/
-services/
-utils/
-server.js
+- HTML5
+- CSS3
+- JavaScript
 
-frontend/
-index.html
+### Backend
 
-.env
-package.json
-readme.md
+- Node.js
+- Express.js
+
+### Database
+
+- MongoDB
+- MongoDB Atlas / Local MongoDB
+
+### Other Tools
+
+- Git
+- GitHub
+- dotenv
+- npm
 
 ---
 
-Getting Started :
+## Project Structure
 
-Prerequisites:
+```text
+database-query-optimizer/
+│
+├── api/
+│   └── index.js
+│
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   └── server.js
+│
+├── frontend/
+│   ├── index.html
+│   ├── script.js
+│   └── style.css
+│
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── vercel.json
+└── README.md
+```
 
-• Node.js (v16 or higher)
-• npm
-• MongoDB (local or Atlas)
-• Unix/Linux/macOS
-• Git
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm
+- MongoDB (local installation or MongoDB Atlas)
+- Git
+
+---
 
 ## Installation
 
@@ -90,73 +99,162 @@ Prerequisites:
 ```bash
 git clone https://github.com/Raveena-thakur/database-query-optimizer.git
 cd database-query-optimizer
+```
 
-Environment Setup :
+### 2. Install dependencies
 
-MONGODB_URI=mongodb://localhost:27017/your-database-name
-PORT=3000
+```bash
+npm install
+```
 
-Run the project :
+### 3. Configure environment variables
+
+Create a `.env` file in the project root directory.
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+PORT=5000
+```
+
+Do not commit the `.env` file to GitHub.
+
+For MongoDB Atlas, replace `your_mongodb_connection_string` with your own MongoDB Atlas connection string.
+
+**Never publish database usernames, passwords, API keys, or other credentials in this repository.**
+
+### 4. Start the application
+
+```bash
 npm start
+```
+
+The application will run on:
+
+```text
+http://localhost:5000
+```
 
 ---
 
-How It Works :
+## API Endpoints
 
-1. Request sent to backend API
-2. Controller validates input
-3. Service layer processes query
-4. Results stored
-5. Response returned with suggestions
+The backend API is available under the `/api` prefix.
 
----
+### Analyze Query
 
-System Components :
+```text
+POST /api/optimize
+```
 
-• Query Analysis API
-• Slow Query Analyzer
-• Index Detector
-• Query Pattern Store
-• Index Benchmarker
-• Index History Tracker
-• Profiler
-• Query Plan Cache
+Analyzes a MongoDB query and returns execution statistics, performance information, index suggestions, and query results.
 
----
+### Create Index
 
-API Endpoints :
+```text
+POST /api/create-index
+```
 
-POST /api/query – Analyze a query
-GET /api/patterns – Get stored query patterns
-GET /api/indexes – View indexes
-GET /api/health – Check server status
-Example Request:
-POST /api/query
-{
-"collection": "users",
-"query": { "age": { "$gt": 25 } }
-}
-Example Response:
-{
-"executionStats": {
-"executionTimeMillis": 145,
-"totalDocsExamined": 50000,
-"totalDocsReturned": 312
-},
-"suggestions": [
-"Full collection scan detected",
-"Consider adding an index on 'age'"
-]
-}
+Creates the recommended index on the selected MongoDB collection.
+
+### Reset Indexes
+
+```text
+POST /api/reset-indexes
+```
+
+Removes indexes from the selected collection except for the default `_id` index.
 
 ---
 
-Comparison with Other Tools :
+## Query Analysis
 
-This project includes features like benchmarking indexes, tracking index history, and system-level profiling, which are not commonly available together in other tools.
+The optimizer analyzes MongoDB execution statistics such as:
+
+- Execution time
+- Documents examined
+- Documents returned
+- Keys examined
+- Winning execution plan
+- Collection scans
+- Index scans
+- Sort operations
+
+This information is used to identify possible performance issues and generate optimization suggestions.
 
 ---
 
-Contributing :
+## Index Optimization
 
-Fork the repository, create a branch, make changes, and open a pull request.
+The system analyzes the structure of the MongoDB query and generates potential index recommendations.
+
+The suggested indexes can be evaluated through the application's index simulation feature before being created.
+
+Users can also apply a recommended index directly through the interface.
+
+---
+
+## Safety and Simulation
+
+Index simulation is controlled by safeguards in the backend.
+
+Simulation may be skipped when:
+
+- No index suggestion is available
+- The collection does not exist
+- The collection is empty
+- The collection exceeds the configured document limit
+- Simulation is disabled through configuration
+- A database operation times out
+
+---
+
+## Environment Variables
+
+The application uses the following environment variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+PORT=5000
+```
+
+Keep all environment files and database credentials private.
+
+---
+
+## Important Security Note
+
+This project is intended for development and demonstration purposes.
+
+Do not use production database credentials while testing the application.
+
+Use a dedicated MongoDB database/user with appropriate permissions when demonstrating the project.
+
+Never commit `.env` files or database credentials to GitHub.
+
+---
+
+## Future Improvements
+
+- Authentication and user management
+- More advanced query optimization strategies
+- Query history dashboard
+- Additional MongoDB performance metrics
+- More detailed index recommendations
+- Improved deployment and production security
+- Automated performance reports
+
+---
+
+## Author
+
+**Raveena Thakur**
+
+GitHub: https://github.com/Raveena-thakur
+
+Project Repository: https://github.com/Raveena-thakur/database-query-optimizer
+
+---
+
+## License
+
+This project is intended for educational and demonstration purposes.
